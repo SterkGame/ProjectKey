@@ -7,6 +7,7 @@ public class PlayerVisual : MonoBehaviour {
     private SpriteRenderer spriteRenderer;
 
     private const string IS_RUNNING = "IsRunning";
+    private const string IS_DIE = "IsDie";
 
     Vector2 movement;
 
@@ -15,21 +16,27 @@ public class PlayerVisual : MonoBehaviour {
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
-    private void Update() {
-        animator.SetBool(IS_RUNNING, Player.Instance.IsRunning());
-        //PlayerAnimationMovement();
-        AdjustPlayerFacingDirection();
+    private void Start() 
+    {
+        Player.Instance.OnPlayerDeath += Player_OnPlayerDeath;
     }
 
-    //private void PlayerAnimationMovement()
-    //{
-    //    movement.x = Input.GetAxisRaw("Horizontal");
-    //    movement.y = Input.GetAxisRaw("Vertical");
+    private void Player_OnPlayerDeath(object sendler, System.EventArgs e)
+    {
+        animator.SetBool(IS_DIE, true);
+    }
 
-    //    animator.SetFloat("Horizontal", movement.x);
-    //    animator.SetFloat("Vertical", movement.y);
-    //    animator.SetFloat("Speed", movement.sqrMagnitude);
-    //}
+    private void Instance_OnPlayerDeath(object sender, System.EventArgs e)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    private void Update() {
+        animator.SetBool(IS_RUNNING, Player.Instance.IsRunning());
+
+        if (Player.Instance.IsAlive())
+            AdjustPlayerFacingDirection();
+    }
 
 
     private void AdjustPlayerFacingDirection()
