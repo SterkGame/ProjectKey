@@ -9,7 +9,7 @@ public class GameInput : MonoBehaviour {
 
     private PlayerInputActions _playerInputActions;
 
-    public event EventHandler OnPlayerAttack;
+    //public event EventHandler OnPlayerAttack;
 
     private void Awake() {
         Instance = this;
@@ -17,7 +17,7 @@ public class GameInput : MonoBehaviour {
         _playerInputActions = new PlayerInputActions();
         _playerInputActions.Enable();
 
-        _playerInputActions.Combat.Attack.started += PlayerAttack_started;
+        //_playerInputActions.Combat.Attack.started += PlayerAttack_started;
     }
 
     
@@ -37,8 +37,8 @@ public class GameInput : MonoBehaviour {
         _playerInputActions.Disable();
     }
 
-    private void PlayerAttack_started(InputAction.CallbackContext obj)
-    {
-        OnPlayerAttack?.Invoke(this, EventArgs.Empty);
-    }
+    //private void PlayerAttack_started(InputAction.CallbackContext obj)
+    //{
+    //    OnPlayerAttack?.Invoke(this, EventArgs.Empty);
+    //}
 }

@@ -7,20 +7,20 @@ public class EnemyAI : MonoBehaviour {
 
     [SerializeField] private State _startingState;
     [SerializeField] private float _roamingDistanceMax = 7f;
-    [SerializeField] private float _roamimgDistanceMin = 3f;
-    [SerializeField] private float _roamimgTimerMax = 2f;
+    private float _roamimgDistanceMin = 3f;
+    private float _roamimgTimerMax = 2f;
 
     [SerializeField] private bool _isChasingEnemy = false;
-    [SerializeField] private float _chasingDistance = 4f;
-    [SerializeField] private float _chasingSpeedMultiplier = 2f;
+    private float _chasingDistance = 14f;
+    private float _chasingSpeedMultiplier = 2f;
 
     [SerializeField] private bool _isAttackingEnemy = false;
-    [SerializeField] private float _attackingDistance = 2f;
-    [SerializeField] private float _attackRate = 2f;
+    private float _attackingDistance = 8f;
+    //private float _attackRate = 2f;
     private float _nextAttackTime = 0f;
 
     private NavMeshAgent _navMeshAgent;
-    private State _currentState;
+    public State _currentState;
     private float _roamingTimer;
     private Vector3 _roamPosition;
     private Vector3 _startingPosition;
@@ -46,7 +46,7 @@ public class EnemyAI : MonoBehaviour {
     }
 
 
-    private enum State {
+    public enum State {
         Idle,
         Roaming,
         Chasing,
@@ -92,7 +92,7 @@ public class EnemyAI : MonoBehaviour {
                 CheckCurrentState();
                 break;
             case State.Attacking:
-                AttackingTarget();
+                //AttackingTarget();
                 CheckCurrentState();
                 break;
             case State.Death:
@@ -143,10 +143,11 @@ public class EnemyAI : MonoBehaviour {
     }
 
     private void AttackingTarget() {
-        if (Time.time > _nextAttackTime) {
-            OnEnemyAttack?.Invoke(this, EventArgs.Empty);
 
-            _nextAttackTime = Time.time + _attackRate;
+
+        if (Time.time > _nextAttackTime) {
+            //OnEnemyAttack?.Invoke(this, EventArgs.Empty);
+            //_nextAttackTime = Time.time + _attackRate;
         }
     }
 

@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: bd42159eba651db4b90c29789ac98c13
+guid: 2dd220ee958fadb48a9ad33b4053126d
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -110,43 +110,43 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Hero_IdleNew_0
+      name: Enemy_Idle_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 96
+        width: 97
         height: 64
       alignment: 9
-      pivot: {x: 0.51069444, y: 0.47479177}
+      pivot: {x: 0.50526035, y: 0.47342405}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 25c60b6231c03254e87d580f0dba1b4c
-      internalID: -1430832193
+      spriteID: 843fd9b51846fc240847d589357236d6
+      internalID: 172617410
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Hero_IdleNew_1
+      name: Enemy_Idle_1
       rect:
         serializedVersion: 2
-        x: 96
+        x: 97
         y: 0
-        width: 96
+        width: 97
         height: 64
       alignment: 9
-      pivot: {x: 0.50999975, y: 0.47504964}
+      pivot: {x: 0.4947395, y: 0.47253817}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ab9b4f99a1c0f2649b4d818e9cb072f5
-      internalID: -1276132236
+      spriteID: 5a939d48e324f624aaf11b8451bb7e8a
+      internalID: 2081851568
       vertices: []
       indices: 
       edges: []
@@ -162,8 +162,8 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Hero_IdleNew_0: -1430832193
-      Hero_IdleNew_1: -1276132236
+      Enemy_Idle_0: 172617410
+      Enemy_Idle_1: 2081851568
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

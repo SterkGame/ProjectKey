@@ -19,6 +19,7 @@ public class ActiveWeapon : MonoBehaviour {
 
 
     public Sword GetActiveWeapon() {
+
         return sword;
     }
 
