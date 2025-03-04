@@ -27,7 +27,7 @@ public class Bullet : MonoBehaviour
         RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, transform.right, distance, whatIsSolid);
         transform.Translate(Vector2.right * speed * Time.deltaTime);
 
-        if(hitInfo.collider != null)
+        if(hitInfo.collider != null) //перевірка нанесення шкоди
         {
             if (hitInfo.collider.CompareTag("Enemy"))
             {

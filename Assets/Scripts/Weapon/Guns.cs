@@ -88,6 +88,7 @@ public class Guns : MonoBehaviour
             }else 
             {
                 TimeFire -= Time.deltaTime;
+                
             }
 
         }
