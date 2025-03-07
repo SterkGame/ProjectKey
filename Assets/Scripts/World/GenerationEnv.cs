@@ -1,32 +1,61 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class GenerationEnv : MonoBehaviour
 {
-    public int numberObject; //кількість об'єктів
+    public int numberObject; // Кількість об'єктів
     private int generatedObject = 0;
-    public float minRange, maxRange; //розмір території
-    public GameObject[] objects; //об'єкти
+    public float minRange, maxRange; // Розмір території
+    public float minDistance = 2.0f; // Мінімальна відстань між об'єктами
+    public GameObject[] objects; // Масив об'єктів
+    private List<Vector3> spawnedPositions = new List<Vector3>(); // Список позицій згенерованих об'єктів
 
     void Update()
     {
-        //рахує кількість об'єктів
         if (generatedObject < numberObject)
         {
             Generate();
             generatedObject++;
         }
-
     }
-    //генерація
+
+    // Генерація об'єктів з перевіркою відстані
     public void Generate()
     {
         int rand = Random.Range(0, objects.Length);
-        var cell = Instantiate(objects[rand], transform.position, Quaternion.identity);
-        cell.transform.position = new Vector3(Random.Range(minRange, maxRange), Random.Range(minRange, maxRange), transform.position.z);
+        Vector3 newPosition;
+        int maxAttempts = 50; // Ліміт спроб пошуку місця
+        int attempts = 0;
 
+        do
+        {
+            newPosition = new Vector3(Random.Range(minRange, maxRange), Random.Range(minRange, maxRange), transform.position.z);
+            attempts++;
+        }
+        while (!IsValidPosition(newPosition) && attempts < maxAttempts);
+
+        // Якщо вдалося знайти місце, створюємо об'єкт
+        if (attempts < maxAttempts)
+        {
+            var cell = Instantiate(objects[rand], newPosition, Quaternion.identity);
+            spawnedPositions.Add(newPosition);
+        }
+        else
+        {
+            Debug.LogWarning("Не вдалося знайти місце для нового об'єкта.");
+        }
     }
 
-
+    // Перевірка, чи нова позиція не надто близько до інших
+    private bool IsValidPosition(Vector3 position)
+    {
+        foreach (Vector3 existingPosition in spawnedPositions)
+        {
+            if (Vector3.Distance(position, existingPosition) < minDistance)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
 }
