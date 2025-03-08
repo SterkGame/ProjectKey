@@ -9,7 +9,12 @@ public class GenerationEnv : MonoBehaviour
     public float minDistance = 2.0f; // Мінімальна відстань між об'єктами
     public GameObject[] objects; // Масив об'єктів
     private List<Vector3> spawnedPositions = new List<Vector3>(); // Список позицій згенерованих об'єктів
+    private NavMeshUpdater navMeshUpdater;
 
+    private void Start()
+    {
+        navMeshUpdater = FindObjectOfType<NavMeshUpdater>();
+    }
     void Update()
     {
         if (generatedObject < numberObject)
@@ -39,6 +44,7 @@ public class GenerationEnv : MonoBehaviour
         {
             var cell = Instantiate(objects[rand], newPosition, Quaternion.identity);
             spawnedPositions.Add(newPosition);
+            navMeshUpdater.UpdateNavMesh(); // Оновлюємо нав меш
         }
         else
         {

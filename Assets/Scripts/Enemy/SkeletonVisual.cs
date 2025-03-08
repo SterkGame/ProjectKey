@@ -26,7 +26,7 @@ public class SkeletonVisual : MonoBehaviour
 
     private void Start()
     {
-        _enemyAI.OnEnemyAttack += _enemyAI_OnEnemyAttack;
+        //_enemyAI.OnEnemyAttack += _enemyAI_OnEnemyAttack;
         _enemyEntity.OnTakeHit += _enemyEntity_OnTakeHit;
         //_enemyEntity.OnDeath += _enemyEntity_OnDeath;
     }
@@ -45,7 +45,7 @@ public class SkeletonVisual : MonoBehaviour
 
     private void OnDestroy()
     {
-        _enemyAI.OnEnemyAttack -= _enemyAI_OnEnemyAttack;
+        //_enemyAI.OnEnemyAttack -= _enemyAI_OnEnemyAttack;
     }
 
     private void Update()

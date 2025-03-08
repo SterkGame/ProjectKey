@@ -20,14 +20,21 @@ public class Guns : MonoBehaviour
     void Start()
     {
         TimeFire = StartTimeFire;
-        ////////////////////////////////////
-        enemyAI = FindObjectOfType<EnemyAI>();
+        ////////////////////////////////
+        //enemyAI = FindObjectOfType<EnemyAI>();
+        //player = FindObjectOfType<Player>();
         ////////////////////////////////
     }
 
 
     void Update()
     {
+        if (gunType == GunType.Enemy)
+        {
+            enemyAI = GetComponentInParent<EnemyAI>();  // Шукаємо в батьківському об'єкті
+        }
+        player = FindObjectOfType<Player>();
+
         if (gunType == GunType.Player)
         {
             Vector3 diference = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
@@ -75,7 +82,7 @@ public class Guns : MonoBehaviour
         transform.rotation = Quaternion.Euler(0f, 0f, rotateZ + offset);
 
 
-        if ((Input.GetKey(KeyCode.Mouse0)) || 
+        if ((Input.GetKey(KeyCode.Mouse0) && gunType == GunType.Player) || 
             (gunType == GunType.Enemy && enemyAI != null && enemyAI._currentState == EnemyAI.State.Attacking))
         {
             if (TimeFire <= 0)

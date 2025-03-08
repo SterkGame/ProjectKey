@@ -32,7 +32,7 @@ public class EnemyAI : MonoBehaviour {
     private float _checkDirectionDuration = 0.1f;
     private Vector3 _lastPosition;
 
-    public event EventHandler OnEnemyAttack;
+    //public event EventHandler OnEnemyAttack;
 
 
     public bool IsRunning {

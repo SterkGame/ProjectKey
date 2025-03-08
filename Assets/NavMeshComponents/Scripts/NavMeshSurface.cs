@@ -77,6 +77,10 @@ namespace NavMeshPlus.Components
         public bool buildHeightMesh { get { return m_BuildHeightMesh; } set { m_BuildHeightMesh = value; } }
 
         [SerializeField]
+        float m_MinRegionArea = 0;
+        public float minRegionArea { get {  return m_MinRegionArea; } set { m_MinRegionArea = value; } }
+        
+        [SerializeField]
         bool m_HideEditorLogs;
         public bool hideEditorLogs { get { return m_HideEditorLogs; } set { m_HideEditorLogs = value; } }
 
@@ -90,6 +94,8 @@ namespace NavMeshPlus.Components
         NavMeshDataInstance m_NavMeshDataInstance;
         Vector3 m_LastPosition = Vector3.zero;
         Quaternion m_LastRotation = Quaternion.identity;
+
+        public NavMeshDataInstance navMeshDataInstance => m_NavMeshDataInstance;
 
         static readonly List<NavMeshSurface> s_NavMeshSurfaces = new List<NavMeshSurface>();
         public INavMeshExtensionsProvider NevMeshExtensions { get; set; } = new NavMeshExtensionsProvider();
@@ -161,6 +167,8 @@ namespace NavMeshPlus.Components
                 buildSettings.overrideVoxelSize = true;
                 buildSettings.voxelSize = voxelSize;
             }
+
+            buildSettings.minRegionArea = minRegionArea;
             return buildSettings;
         }
 
