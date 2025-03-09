@@ -12,7 +12,7 @@ public class Player : MonoBehaviour {
 
     [SerializeField] private float _movingSpeed = 10f;
     [SerializeField] private int _maxHealth = 10;
-    [SerializeField] private float _damageRecoveryTime = 0.5f;
+    [SerializeField] private float _damageRecoveryTime = 0.1f;
 
     public Slider healsSl;
  

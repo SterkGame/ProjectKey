@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
+using UnityEngine.UI;
 
 public class Guns : MonoBehaviour
 {
@@ -10,20 +11,22 @@ public class Guns : MonoBehaviour
     public GunType gunType;
     public float StartTimeFire;
     public float offset;
-    [SerializeField] private EnemyAI enemyAI;
+    public int currentAmmo = 20;
+    public int allAmmo = 150;
+    public int fullAmmo = 240;
 
+    
     private float rotateZ;
     private float TimeFire;
+    
     public enum GunType { Player, Enemy }
+    [SerializeField] private Text ammoCount;
+    [SerializeField] private EnemyAI enemyAI;
     [SerializeField] private Player player;
     public Animator anim;
     void Start()
     {
         TimeFire = StartTimeFire;
-        ////////////////////////////////
-        //enemyAI = FindObjectOfType<EnemyAI>();
-        //player = FindObjectOfType<Player>();
-        ////////////////////////////////
     }
 
 
@@ -35,8 +38,9 @@ public class Guns : MonoBehaviour
         }
         player = FindObjectOfType<Player>();
 
-        if (gunType == GunType.Player)
+        if (gunType == GunType.Player && Player.Instance.IsAlive())
         {
+
             Vector3 diference = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
             rotateZ = Mathf.Atan2(diference.y, diference.x) * Mathf.Rad2Deg;
 
@@ -82,8 +86,8 @@ public class Guns : MonoBehaviour
         transform.rotation = Quaternion.Euler(0f, 0f, rotateZ + offset);
 
 
-        if ((Input.GetKey(KeyCode.Mouse0) && gunType == GunType.Player) || 
-            (gunType == GunType.Enemy && enemyAI != null && enemyAI._currentState == EnemyAI.State.Attacking))
+        if ((Input.GetKey(KeyCode.Mouse0) && gunType == GunType.Player && currentAmmo > 0 && Player.Instance.IsAlive()) || 
+            (gunType == GunType.Enemy && enemyAI != null && enemyAI._currentState == EnemyAI.State.Attacking && currentAmmo > 0))
         {
             if (TimeFire <= 0)
             {
@@ -91,6 +95,7 @@ public class Guns : MonoBehaviour
                 TimeFire = StartTimeFire;
                 anim.SetBool("idle", false);
                 anim.SetBool("fire", true);
+                currentAmmo -= 1;
 
             }else 
             {
@@ -103,6 +108,40 @@ public class Guns : MonoBehaviour
         {
             anim.SetBool("idle", true);
             anim.SetBool("fire", false);
+        }
+
+        if (gunType == GunType.Player)
+        {
+            ammoCount.text = currentAmmo + "/" + allAmmo;
+        }
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            Reload();
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.GetComponent<AmmoClipAuto>())
+        {
+            allAmmo += 40;
+            Destroy(collision.gameObject);
+        }
+    }
+
+    public void Reload()
+    {
+        int reason = 20 - currentAmmo;
+        if (allAmmo >= reason) 
+        { 
+            allAmmo = allAmmo - reason;
+            currentAmmo = 20;
+        }
+        else
+        {
+            currentAmmo = currentAmmo + allAmmo;
+            allAmmo = 0;
         }
     }
 }

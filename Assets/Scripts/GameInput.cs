@@ -32,9 +32,16 @@ public class GameInput : MonoBehaviour {
         return mousePos;
     }
 
+    public void EnableMovement()
+    {
+        _playerInputActions.Enable();
+
+    }
+
     public void DisableMovement()
     {
         _playerInputActions.Disable();
+
     }
 
     //private void PlayerAttack_started(InputAction.CallbackContext obj)
