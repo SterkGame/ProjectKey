@@ -2,7 +2,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(SpriteRenderer))]
-public class SkeletonVisual : MonoBehaviour
+public class EnemyVisual : MonoBehaviour
 {
     [SerializeField] private EnemyAI _enemyAI;
     [SerializeField] private EnemyEntity _enemyEntity;
@@ -28,13 +28,13 @@ public class SkeletonVisual : MonoBehaviour
     {
         //_enemyAI.OnEnemyAttack += _enemyAI_OnEnemyAttack;
         _enemyEntity.OnTakeHit += _enemyEntity_OnTakeHit;
-        //_enemyEntity.OnDeath += _enemyEntity_OnDeath;
+        _enemyEntity.OnDeath += _enemyEntity_OnDeath;
     }
 
     private void _enemyEntity_OnDeath(object sender, System.EventArgs e)
     {
         _animator.SetBool(IS_DIE, true);
-        _spriteRenderer.sortingOrder = -1;
+        _spriteRenderer.sortingOrder = 2;
         _enemyShadow.SetActive(false);
     }
 
@@ -51,18 +51,9 @@ public class SkeletonVisual : MonoBehaviour
     private void Update()
     {
         _animator.SetBool(IS_RUNNING, _enemyAI.IsRunning);
-        _animator.SetFloat(CHASING_SPEED_MULTIPLIER, _enemyAI.GetRoamingAnimationSpeed());
+        //_animator.SetFloat(CHASING_SPEED_MULTIPLIER, 2f);
     }
 
-    //public void triggerattackanimationturnoff()
-    //{
-    //    _enemyentity.polygoncolliderturnoff();
-    //}
-
-    //public void TriggerAttackAnimationTurnOn()
-    //{
-    //    _enemyEntity.PolygonColliderTurnOn();
-    //}
 
     private void _enemyAI_OnEnemyAttack(object sender, System.EventArgs e)
     {

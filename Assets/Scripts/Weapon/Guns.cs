@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
+//using UnityEngine.UIElements;
 using UnityEngine.UI;
+using TMPro;
 
 public class Guns : MonoBehaviour
 {
@@ -12,21 +13,31 @@ public class Guns : MonoBehaviour
     public float StartTimeFire;
     public float offset;
     public int currentAmmo = 20;
+    public int maxCurrentAmmo = 20;
     public int allAmmo = 150;
     public int fullAmmo = 240;
+    private float reloadTime = 3f;
 
-    
+
+
     private float rotateZ;
     private float TimeFire;
-    
+    private bool isReloading = false;
+
     public enum GunType { Player, Enemy }
-    [SerializeField] private Text ammoCount;
+    [SerializeField] private TextMeshProUGUI ammoCount;
+    [SerializeField] private Image reloadingText;
     [SerializeField] private EnemyAI enemyAI;
     [SerializeField] private Player player;
+    [SerializeField] private PauseMenu pauseMenu;
     public Animator anim;
     void Start()
     {
         TimeFire = StartTimeFire;
+        isReloading = false;
+
+        reloadingText.gameObject.SetActive(false);
+        
     }
 
 
@@ -38,7 +49,7 @@ public class Guns : MonoBehaviour
         }
         player = FindObjectOfType<Player>();
 
-        if (gunType == GunType.Player && Player.Instance.IsAlive())
+        if (gunType == GunType.Player && Player.Instance.IsAlive() && pauseMenu?.pauseGame == false)
         {
 
             Vector3 diference = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
@@ -86,8 +97,9 @@ public class Guns : MonoBehaviour
         transform.rotation = Quaternion.Euler(0f, 0f, rotateZ + offset);
 
 
-        if ((Input.GetKey(KeyCode.Mouse0) && gunType == GunType.Player && currentAmmo > 0 && Player.Instance.IsAlive()) || 
-            (gunType == GunType.Enemy && enemyAI != null && enemyAI._currentState == EnemyAI.State.Attacking && currentAmmo > 0))
+        if (((Input.GetKey(KeyCode.Mouse0) && gunType == GunType.Player && currentAmmo > 0 && Player.Instance.IsAlive()) || 
+            (gunType == GunType.Enemy && enemyAI != null && enemyAI._currentState == EnemyAI.State.Attacking && currentAmmo > 0)) 
+            && !isReloading)
         {
             if (TimeFire <= 0)
             {
@@ -115,9 +127,12 @@ public class Guns : MonoBehaviour
             ammoCount.text = currentAmmo + "/" + allAmmo;
         }
 
-        if (Input.GetKeyDown(KeyCode.R))
+        if (((Input.GetKeyDown(KeyCode.R) && gunType == GunType.Player) || currentAmmo == 0) && !isReloading)
         {
-            Reload();
+            if (currentAmmo < maxCurrentAmmo)
+            {
+                StartCoroutine(Reload());
+            }
         }
     }
 
@@ -130,18 +145,26 @@ public class Guns : MonoBehaviour
         }
     }
 
-    public void Reload()
+
+    private IEnumerator Reload()
     {
-        int reason = 20 - currentAmmo;
-        if (allAmmo >= reason) 
-        { 
+        reloadingText.gameObject.SetActive(true);
+        isReloading = true;
+
+        yield return new WaitForSeconds(reloadTime);
+        int reason = maxCurrentAmmo - currentAmmo;
+        if (allAmmo >= reason)
+        {
             allAmmo = allAmmo - reason;
-            currentAmmo = 20;
+            currentAmmo = maxCurrentAmmo;
         }
         else
         {
             currentAmmo = currentAmmo + allAmmo;
             allAmmo = 0;
         }
-    }
+
+        isReloading = false;
+        reloadingText.gameObject.SetActive(false);
+    }      
 }

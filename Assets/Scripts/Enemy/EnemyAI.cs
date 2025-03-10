@@ -31,6 +31,7 @@ public class EnemyAI : MonoBehaviour {
     private float _nextCheckDirectionTime = 0f;
     private float _checkDirectionDuration = 0.1f;
     private Vector3 _lastPosition;
+    private NavMeshUpdater navMeshUpdater;
 
     //public event EventHandler OnEnemyAttack;
 
@@ -53,7 +54,11 @@ public class EnemyAI : MonoBehaviour {
         Attacking,
         Death
     }
-
+    private void Start()
+    {
+        //navMeshUpdater = FindObjectOfType<NavMeshUpdater>();
+        //navMeshUpdater.UpdateNavMesh();
+    }
     private void Awake() {
         _navMeshAgent = GetComponent<NavMeshAgent>();
         _navMeshAgent.updateRotation = false;

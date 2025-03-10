@@ -3,18 +3,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
+
 
 [SelectionBase]
 public class Player : MonoBehaviour {
 
     public static Player Instance { get; private set; }
-    public event EventHandler OnPlayerDeath; 
+    public event EventHandler OnPlayerDeath;
+    public GameObject bloodPrefab;
+    public GameObject guns;
 
     [SerializeField] private float _movingSpeed = 10f;
     [SerializeField] private int _maxHealth = 10;
     [SerializeField] private float _damageRecoveryTime = 0.1f;
 
-    public Slider healsSl;
+    public UnityEngine.UI.Slider healsSl;
  
     Vector2 inputVector;
 
@@ -36,12 +40,8 @@ public class Player : MonoBehaviour {
         _curentHealth = _maxHealth;
         _canTakeDamage = true;
         _isAlive = true;
-        //GameInput.Instance.OnPlayerAttack += GameInput_OnPlayerAttack;
     }
 
-    //private void GameInput_OnPlayerAttack(object sender, System.EventArgs e) {
-    //    ActiveWeapon.Instance.GetActiveWeapon().Attack();
-    //}
 
     private void Update() {
         healsSl.value = _curentHealth;
@@ -66,6 +66,7 @@ public class Player : MonoBehaviour {
             _canTakeDamage = false;
             _curentHealth = Mathf.Max(0, _curentHealth -= damage);
 
+            Instantiate(bloodPrefab, transform.position, Quaternion.identity);
             StartCoroutine(DamageRecoveryRoutine());
         }
 
@@ -78,7 +79,7 @@ public class Player : MonoBehaviour {
         {
             _isAlive = false;
             GameInput.Instance.DisableMovement();
-
+            guns.SetActive(false);
             OnPlayerDeath?.Invoke(this, EventArgs.Empty);
         }
     }
@@ -107,5 +108,4 @@ public class Player : MonoBehaviour {
         Vector3 playerScreenPosition = Camera.main.WorldToScreenPoint(transform.position);
         return playerScreenPosition;
     }
-
 }

@@ -5,11 +5,13 @@ using UnityEngine;
 public class PlayerVisual : MonoBehaviour {
     private Animator animator;
     private SpriteRenderer spriteRenderer;
+    
 
     private const string IS_RUNNING = "IsRunning";
     private const string IS_DIE = "IsDie";
 
     Vector2 movement;
+    [SerializeField] private PauseMenu pauseMenu;
 
     private void Awake() {
         animator = GetComponent<Animator>();
@@ -18,6 +20,7 @@ public class PlayerVisual : MonoBehaviour {
 
     private void Start() 
     {
+        pauseMenu = GetComponent<PauseMenu>();
         Player.Instance.OnPlayerDeath += Player_OnPlayerDeath;
     }
 
@@ -34,7 +37,7 @@ public class PlayerVisual : MonoBehaviour {
     private void Update() {
         animator.SetBool(IS_RUNNING, Player.Instance.IsRunning());
 
-        if (Player.Instance.IsAlive())
+        if (Player.Instance.IsAlive())//&& pauseMenu?.pauseGame == false)
             AdjustPlayerFacingDirection();
     }
 

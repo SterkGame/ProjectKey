@@ -14,6 +14,7 @@ public class GenerationEnv : MonoBehaviour
     private void Start()
     {
         navMeshUpdater = FindObjectOfType<NavMeshUpdater>();
+        navMeshUpdater.UpdateNavMesh();
     }
     void Update()
     {
