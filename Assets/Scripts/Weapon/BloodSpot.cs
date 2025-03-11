@@ -5,7 +5,7 @@ using UnityEngine;
 public class BloodSpot : MonoBehaviour
 {
     private SpriteRenderer spriteRenderer;
-    private float fadeDuration = 8f;
+    private float fadeDuration = 20f;
 
     void Awake()
     {

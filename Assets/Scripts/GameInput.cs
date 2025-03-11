@@ -16,11 +16,23 @@ public class GameInput : MonoBehaviour {
 
         _playerInputActions = new PlayerInputActions();
         _playerInputActions.Enable();
-
+        
         //_playerInputActions.Combat.Attack.started += PlayerAttack_started;
     }
 
-    
+
+    private void OnEnable()
+    {
+        if (_playerInputActions == null)
+        {
+            _playerInputActions = new PlayerInputActions();
+        }
+
+        _playerInputActions.Player.Enable();
+        _playerInputActions.Combat.Enable();
+    }
+
+
 
     public Vector2 GetMovementVector() {
         Vector2 inputVector = _playerInputActions.Player.Move.ReadValue<Vector2>();
@@ -41,6 +53,14 @@ public class GameInput : MonoBehaviour {
     public void DisableMovement()
     {
         _playerInputActions.Disable();
+
+    }
+
+    public void OnDisable()
+    {
+        _playerInputActions.Player.Disable();
+        _playerInputActions.Combat.Disable();
+        _playerInputActions.Dispose();
 
     }
 

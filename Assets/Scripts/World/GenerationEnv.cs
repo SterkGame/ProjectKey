@@ -1,20 +1,30 @@
-using System.Collections.Generic;
+п»їusing System.Collections.Generic;
 using UnityEngine;
 
 public class GenerationEnv : MonoBehaviour
 {
-    public int numberObject; // Кількість об'єктів
+    public int numberObject; // РљС–Р»СЊРєС–СЃС‚СЊ РѕР±'С”РєС‚С–РІ
     private int generatedObject = 0;
-    public float minRange, maxRange; // Розмір території
-    public float minDistance = 2.0f; // Мінімальна відстань між об'єктами
-    public GameObject[] objects; // Масив об'єктів
-    private List<Vector3> spawnedPositions = new List<Vector3>(); // Список позицій згенерованих об'єктів
+    public float minRange, maxRange; // Р РѕР·РјС–СЂ С‚РµСЂРёС‚РѕСЂС–С—
+    public float minDistance = 2.0f; // РњС–РЅС–РјР°Р»СЊРЅР° РІС–РґСЃС‚Р°РЅСЊ РјС–Р¶ РѕР±'С”РєС‚Р°РјРё
+    public GameObject[] objects; // РњР°СЃРёРІ РѕР±'С”РєС‚С–РІ
+    private List<Vector3> spawnedPositions = new List<Vector3>(); // РЎРїРёСЃРѕРє РїРѕР·РёС†С–Р№ Р·РіРµРЅРµСЂРѕРІР°РЅРёС… РѕР±'С”РєС‚С–РІ
     private NavMeshUpdater navMeshUpdater;
+
+    public static GenerationEnv Instance;
+    public bool IsGenerationComplete { get; private set; } = false;
+
+    private void Awake()
+    {
+        Debug.Log("GenerationEnv Awake() РІРёРєР»РёРєР°РЅРѕ!");
+        Instance = this;
+    }
 
     private void Start()
     {
         navMeshUpdater = FindObjectOfType<NavMeshUpdater>();
         navMeshUpdater.UpdateNavMesh();
+        
     }
     void Update()
     {
@@ -22,15 +32,22 @@ public class GenerationEnv : MonoBehaviour
         {
             Generate();
             generatedObject++;
+            Debug.Log("Р“РµРЅРµСЂР°С†С–СЏ РїСЂР°С†СЋС”");
         }
+        else if (!IsGenerationComplete)
+        {
+            IsGenerationComplete = true;
+            Debug.Log("Р“РµРЅРµСЂР°С†С–СЏ Р·Р°РІРµСЂС€РµРЅР°");
+        }
+
     }
 
-    // Генерація об'єктів з перевіркою відстані
+    // Р“РµРЅРµСЂР°С†С–СЏ РѕР±'С”РєС‚С–РІ Р· РїРµСЂРµРІС–СЂРєРѕСЋ РІС–РґСЃС‚Р°РЅС–
     public void Generate()
     {
         int rand = Random.Range(0, objects.Length);
         Vector3 newPosition;
-        int maxAttempts = 50; // Ліміт спроб пошуку місця
+        int maxAttempts = 50; // Р›С–РјС–С‚ СЃРїСЂРѕР± РїРѕС€СѓРєСѓ РјС–СЃС†СЏ
         int attempts = 0;
 
         do
@@ -40,20 +57,23 @@ public class GenerationEnv : MonoBehaviour
         }
         while (!IsValidPosition(newPosition) && attempts < maxAttempts);
 
-        // Якщо вдалося знайти місце, створюємо об'єкт
+        // РЇРєС‰Рѕ РІРґР°Р»РѕСЃСЏ Р·РЅР°Р№С‚Рё РјС–СЃС†Рµ, СЃС‚РІРѕСЂСЋС”РјРѕ РѕР±'С”РєС‚
         if (attempts < maxAttempts)
         {
             var cell = Instantiate(objects[rand], newPosition, Quaternion.identity);
             spawnedPositions.Add(newPosition);
-            navMeshUpdater.UpdateNavMesh(); // Оновлюємо нав меш
+            navMeshUpdater.UpdateNavMesh(); // РћРЅРѕРІР»СЋС”РјРѕ РЅР°РІ РјРµС€
+            IsGenerationComplete = true;
+
         }
         else
         {
-            Debug.LogWarning("Не вдалося знайти місце для нового об'єкта.");
+            Debug.LogWarning("РќРµ РІРґР°Р»РѕСЃСЏ Р·РЅР°Р№С‚Рё РјС–СЃС†Рµ РґР»СЏ РЅРѕРІРѕРіРѕ РѕР±'С”РєС‚Р°.");
+            IsGenerationComplete = true;
         }
     }
 
-    // Перевірка, чи нова позиція не надто близько до інших
+    // РџРµСЂРµРІС–СЂРєР°, С‡Рё РЅРѕРІР° РїРѕР·РёС†С–СЏ РЅРµ РЅР°РґС‚Рѕ Р±Р»РёР·СЊРєРѕ РґРѕ С–РЅС€РёС…
     private bool IsValidPosition(Vector3 position)
     {
         foreach (Vector3 existingPosition in spawnedPositions)

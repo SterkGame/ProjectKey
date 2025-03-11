@@ -7,10 +7,20 @@ public class PauseMenu : MonoBehaviour
 {
     public bool pauseGame;
     public GameObject pauseGameMenu;
+    public GameObject gameOver;
+    private bool isOver;
+
+    private void Start()
+    {
+        isOver = false;
+        pauseGameMenu.SetActive(false);
+        gameOver.SetActive(false);
+    }
+
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape) && isOver == false)
         {
             if (pauseGame)
             {
@@ -39,6 +49,27 @@ public class PauseMenu : MonoBehaviour
         pauseGame = true;
 
         GameInput.Instance.DisableMovement();
+    }
+
+    public void GameOverDeath()
+    {
+        isOver = true;
+        gameOver.SetActive(true);
+        Time.timeScale = 0f;
+        pauseGame = true;
+        
+        
+    }
+
+    public void RestartScene()
+    {
+        Time.timeScale = 1f;
+        isOver = false;
+        pauseGame = false;
+        gameOver.SetActive(false);
+
+        GameInput.Instance.EnableMovement();
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     public void LoadMenu()

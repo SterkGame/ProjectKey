@@ -138,9 +138,13 @@ public class Guns : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.GetComponent<AmmoClipAuto>())
+        if (collision.GetComponent<AmmoClipAuto>() && gunType == GunType.Player)
         {
-            allAmmo += 40;
+            allAmmo += 20;
+            if (allAmmo > fullAmmo)
+            {
+                allAmmo = fullAmmo;
+            }
             Destroy(collision.gameObject);
         }
     }

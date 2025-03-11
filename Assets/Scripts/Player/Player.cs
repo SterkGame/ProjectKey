@@ -11,6 +11,7 @@ public class Player : MonoBehaviour {
 
     public static Player Instance { get; private set; }
     public event EventHandler OnPlayerDeath;
+    public event EventHandler OnTakeHits;
     public GameObject bloodPrefab;
     public GameObject guns;
 
@@ -40,6 +41,7 @@ public class Player : MonoBehaviour {
         _curentHealth = _maxHealth;
         _canTakeDamage = true;
         _isAlive = true;
+        healsSl.maxValue = _maxHealth;
     }
 
 
@@ -65,6 +67,7 @@ public class Player : MonoBehaviour {
         {
             _canTakeDamage = false;
             _curentHealth = Mathf.Max(0, _curentHealth -= damage);
+            OnTakeHits?.Invoke(this, EventArgs.Empty);
 
             Instantiate(bloodPrefab, transform.position, Quaternion.identity);
             StartCoroutine(DamageRecoveryRoutine());
@@ -81,6 +84,7 @@ public class Player : MonoBehaviour {
             GameInput.Instance.DisableMovement();
             guns.SetActive(false);
             OnPlayerDeath?.Invoke(this, EventArgs.Empty);
+            FindObjectOfType<PauseMenu>().GameOverDeath();
         }
     }
 
@@ -108,4 +112,20 @@ public class Player : MonoBehaviour {
         Vector3 playerScreenPosition = Camera.main.WorldToScreenPoint(transform.position);
         return playerScreenPosition;
     }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.GetComponent<MedicalClip>())
+        {
+            
+            _curentHealth += 4;
+            if (_curentHealth > _maxHealth)
+            {
+                _curentHealth = _maxHealth;
+            }
+            Destroy(collision.gameObject);
+        }
+    }
 }
+
+

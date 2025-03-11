@@ -60,7 +60,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 100
+  m_SortingOrder: 8
   m_TargetDisplay: 0
 --- !u!114 &2231371109285194927
 MonoBehaviour:
@@ -682,6 +682,8 @@ MonoBehaviour:
   enemyDamageAmount: 1
   bloodPrefab: {fileID: 1339603666436511128, guid: 73ae07a9fa78da446863f90e9a7eeeac, type: 3}
   guns: {fileID: 976146884094060668}
+  ammoClip: {fileID: 9071196902611215845, guid: 5ef779d2c7f626f4b9b50266eabe94c0, type: 3}
+  medicalClip: {fileID: 2960314869952967005, guid: 57bda50e604dfd348abd11fd278e6f78, type: 3}
   reloadingText: {fileID: 7042690216460747209}
 --- !u!114 &6299214589834612365
 MonoBehaviour:
@@ -817,8 +819,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1746953581906597259}
   - component: {fileID: 1993249976447390617}
-  - component: {fileID: 1419825358288406242}
   - component: {fileID: 5334330977659988697}
+  - component: {fileID: 37343815039362248}
   m_Layer: 7
   m_Name: EnemyVisual
   m_TagString: Enemy
@@ -894,7 +896,22 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!95 &1419825358288406242
+--- !u!114 &5334330977659988697
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5649681990420832767}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8df892334777c6243837415a14d501a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _enemyAI: {fileID: 6299214589834612365}
+  _enemyEntity: {fileID: 4384436725367692663}
+  _enemyShadow: {fileID: 1229139190645852147}
+--- !u!95 &37343815039362248
 Animator:
   serializedVersion: 5
   m_ObjectHideFlags: 0
@@ -915,21 +932,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &5334330977659988697
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5649681990420832767}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8df892334777c6243837415a14d501a6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _enemyAI: {fileID: 6299214589834612365}
-  _enemyEntity: {fileID: 4384436725367692663}
-  _enemyShadow: {fileID: 1229139190645852147}
 --- !u!1 &7897451815497567645
 GameObject:
   m_ObjectHideFlags: 0

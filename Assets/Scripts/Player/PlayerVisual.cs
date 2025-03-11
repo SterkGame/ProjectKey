@@ -5,10 +5,10 @@ using UnityEngine;
 public class PlayerVisual : MonoBehaviour {
     private Animator animator;
     private SpriteRenderer spriteRenderer;
-    
 
     private const string IS_RUNNING = "IsRunning";
     private const string IS_DIE = "IsDie";
+    private const string TAKEHIT = "TakeHit";
 
     Vector2 movement;
     [SerializeField] private PauseMenu pauseMenu;
@@ -22,6 +22,12 @@ public class PlayerVisual : MonoBehaviour {
     {
         pauseMenu = GetComponent<PauseMenu>();
         Player.Instance.OnPlayerDeath += Player_OnPlayerDeath;
+        Player.Instance.OnTakeHits += Player_OnTakeHit;
+    }
+
+    private void Player_OnTakeHit(object sender, System.EventArgs e)
+    {
+        animator.SetTrigger(TAKEHIT);
     }
 
     private void Player_OnPlayerDeath(object sendler, System.EventArgs e)
