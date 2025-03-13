@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using TMPro;
 
 public class PauseMenu : MonoBehaviour
 {
@@ -9,6 +11,8 @@ public class PauseMenu : MonoBehaviour
     public GameObject pauseGameMenu;
     public GameObject gameOver;
     private bool isOver;
+    public TextMeshProUGUI textOver;
+    public Image imageOver;
 
     private void Start()
     {
@@ -55,10 +59,21 @@ public class PauseMenu : MonoBehaviour
     {
         isOver = true;
         gameOver.SetActive(true);
+        textOver.text = "Game Over";
+        textOver.color = new Color(1f, 0f, 0f, 1f);
+        imageOver.color = new Color(0.62f, 0.14f, 0.14f, 0.58f);
+        Time.timeScale = 0f;
+        pauseGame = true; 
+    }
+    public void GameOverWin()
+    {
+        isOver = true;
+        gameOver.SetActive(true);
+        textOver.text = "You Win";
+        textOver.color = new Color(0f, 1f, 0f, 1f);
+        imageOver.color = new Color(0.53f, 1f, 0.5f, 0.58f);
         Time.timeScale = 0f;
         pauseGame = true;
-        
-        
     }
 
     public void RestartScene()

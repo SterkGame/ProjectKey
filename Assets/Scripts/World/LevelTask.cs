@@ -9,6 +9,7 @@ public class LevelTask : MonoBehaviour
     public static int enemyCount;
     public static int allEnemyCount;
     public EnemyAI[] enemyAIs;
+    public PauseMenu pauseMenu;
 
     void Start()
     {
@@ -24,11 +25,11 @@ public class LevelTask : MonoBehaviour
         allEnemyCount = enemyAIs.Length;
         text.text = "Enemies killed: " + enemyCount + "/" + allEnemyCount;
 
-        //if (allEnemyCount == enemyCount)
-        //{
-
-        //    Debug.Log("Перемога");
-        //}
+        if (allEnemyCount == enemyCount)
+        {
+            Debug.Log("Перемога");
+            pauseMenu.GameOverWin();
+        }
     }
 
     public void EnemyKilled()

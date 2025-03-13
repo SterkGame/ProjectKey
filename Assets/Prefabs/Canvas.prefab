@@ -542,6 +542,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyAIs: []
+  pauseMenu: {fileID: 5289296730892476559}
 --- !u!114 &2654773533527814300
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -692,7 +693,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.5377358, g: 0.1445799, b: 0.1445799, a: 0.5882353}
+  m_Color: {r: 0.627451, g: 1, b: 0.50980395, a: 0.5882353}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1446,8 +1447,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4280822015
-  m_fontColor: {r: 1, g: 0.15566039, b: 0.15566039, a: 1}
+    rgba: 4278255360
+  m_fontColor: {r: 0, g: 1, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -1698,6 +1699,8 @@ MonoBehaviour:
   pauseGame: 0
   pauseGameMenu: {fileID: 2979588127962506451}
   gameOver: {fileID: 2751146555428988470}
+  textOver: {fileID: 464054712516081520}
+  imageOver: {fileID: 4321097623230603620}
 --- !u!114 &8335031997689603147
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - Enemy
+  - Building
+  - Vegetation
   layers:
   - Default
   - TransparentFX
@@ -15,7 +17,7 @@ TagManager:
   - Player
   - Enemy
   - Solid
-  - 
+  - Environment
   - 
   - 
   - 
@@ -39,6 +41,12 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Background 1
+    uniqueID: 2936538815
+    locked: 0
+  - name: Background 2
+    uniqueID: 3873075167
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
