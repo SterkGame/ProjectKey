@@ -6,16 +6,16 @@ using System;
 public class EnemyAI : MonoBehaviour {
 
     [SerializeField] private State _startingState;
-    [SerializeField] private float _roamingDistanceMax = 7f;
+    [SerializeField] private float _roamingDistanceMax = 5f;
     private float _roamimgDistanceMin = 3f;
     private float _roamimgTimerMax = 2f;
 
     [SerializeField] private bool _isChasingEnemy = false;
-    private float _chasingDistance = 14f;
+    private float _chasingDistance = 20f;
     private float _chasingSpeedMultiplier = 2f;
 
     [SerializeField] private bool _isAttackingEnemy = false;
-    private float _attackingDistance = 8f;
+    private float _attackingDistance = 12f;
     //private float _attackRate = 2f;
     private float _nextAttackTime = 0f;
 

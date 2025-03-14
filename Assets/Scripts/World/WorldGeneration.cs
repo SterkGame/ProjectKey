@@ -8,8 +8,7 @@ public class MapGenerator : MonoBehaviour
     public Tile[] roadTiles;   // Тайли для дороги
     public GameObject[] buildingPrefabs; // Префаби будівель
     public GameObject[] vegetationPrefabs; // Префаби рослинності
-
-    public GameObject[] grassPrefabs; // Префаб трави
+    public GameObject[] grassPrefabs; // Масив префабів травинок
     public int grassDensity = 1000; // Густота трави
     public int mapSize = 100; // Розмір карти (від -50 до 50 по обох осях)
     public int numberOfBuildings = 4; // Кількість будівель
@@ -17,6 +16,9 @@ public class MapGenerator : MonoBehaviour
     public int roadThickness = 3; // Товщина дороги
     public int buildingSpacing = 20; // Відстань між будівлями та дорогою
     public int vegetationSpacing = 2; // Відстань між рослинністю
+    public float noiseScale = 20f; // Масштаб шуму
+    private float forestThreshold = 0.9f; // Поріг для лісу
+    private float clearingThreshold = 0.7f; // Поріг для галявини
 
     private GameObject environmentParent; // Батьківський об’єкт для рослинності та будівель
 
@@ -137,22 +139,55 @@ public class MapGenerator : MonoBehaviour
 
     void PlaceVegetation()
     {
-        for (int i = 0; i < vegetationDensity; i++)
+        for (int x = -mapSize / 2; x < mapSize / 2; x++)
         {
-            // Випадкові координати для рослинності
-            int x = Random.Range(-mapSize / 2, mapSize / 2);
-            int y = Random.Range(-mapSize / 2, mapSize / 2);
-
-            // Перевіряємо, чи місце підходить для рослинності
-            if (IsPositionValidForVegetation(x, y))
+            for (int y = -mapSize / 2; y < mapSize / 2; y++)
             {
-                // Вибираємо випадковий префаб рослинності
-                GameObject vegetationPrefab = vegetationPrefabs[Random.Range(0, vegetationPrefabs.Length)];
-                GameObject vegetation = Instantiate(vegetationPrefab, new Vector3(x, y, 0), Quaternion.identity);
+                // Генеруємо значення шуму для поточних координат
+                float xCoord = (float)x / mapSize * noiseScale;
+                float yCoord = (float)y / mapSize * noiseScale;
+                float noiseValue = Mathf.PerlinNoise(xCoord, yCoord);
 
-                // Робимо рослинність дочірнім об’єктом Environment
-                vegetation.transform.parent = environmentParent.transform;
+                // Визначаємо, чи це ліс, галявина чи перехідна зона
+                if (noiseValue > forestThreshold)
+                {
+                    // Ліс: багато дерев
+                    if (Random.Range(0, 2) == 0) // 50% шанс розмістити дерево
+                    {
+                        PlaceTree(x, y);
+                    }
+                }
+                else if (noiseValue < clearingThreshold)
+                {
+                    // Галявина: мало дерев
+                    if (Random.Range(0, 10) == 0) // 10% шанс розмістити дерево
+                    {
+                        PlaceTree(x, y);
+                    }
+                }
+                else
+                {
+                    // Перехідна зона: середня кількість дерев
+                    if (Random.Range(0, 5) == 0) // 20% шанс розмістити дерево
+                    {
+                        PlaceTree(x, y);
+                    }
+                }
             }
+        }
+    }
+
+    void PlaceTree(int x, int y)
+    {
+        // Перевіряємо, чи місце підходить для дерева
+        if (IsPositionValidForVegetation(x, y))
+        {
+            // Вибираємо випадковий префаб дерева
+            GameObject treePrefab = vegetationPrefabs[Random.Range(0, vegetationPrefabs.Length)];
+            GameObject tree = Instantiate(treePrefab, new Vector3(x, y, 0), Quaternion.identity);
+
+            // Робимо дерево дочірнім об’єктом Environment
+            tree.transform.parent = environmentParent.transform;
         }
     }
 
@@ -196,7 +231,7 @@ public class MapGenerator : MonoBehaviour
             // Перевіряємо, чи місце підходить для трави
             if (IsPositionValidForGrass(x, y))
             {
-                // Створюємо траву
+                // Вибираємо випадковий префаб травинки
                 GameObject grassPrefab = grassPrefabs[Random.Range(0, grassPrefabs.Length)];
                 GameObject grass = Instantiate(grassPrefab, new Vector3(x, y, 0), Quaternion.identity);
 
@@ -225,14 +260,3 @@ public class MapGenerator : MonoBehaviour
         return false;
     }
 }
-
-//bool IsPositionValidForGrass(float x, float y)
-//    {
-//        // Перевіряємо, чи місце не зайняте дорогою або будівлею
-//        Vector3Int tilePosition = tilemap.WorldToCell(new Vector3(x, y, 0));
-//        if (tilemap.GetTile(tilePosition) == roadTiles[0] || IsBuildingAtPosition(Mathf.RoundToInt(x), Mathf.RoundToInt(y)))
-//            return false;
-
-//        return true;
-//    }
-//}

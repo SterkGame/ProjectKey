@@ -10,6 +10,7 @@ public class TransparencyController : MonoBehaviour
 
     private SpriteRenderer lastHitRenderer; // Останній затемнений об'єкт
     private Coroutine fadeCoroutine; // Корутин для плавного затемнення
+    private Color originalColor; // Початковий колір об'єкта
 
     void Update()
     {
@@ -28,8 +29,11 @@ public class TransparencyController : MonoBehaviour
                 if (lastHitRenderer != null)
                 {
                     if (fadeCoroutine != null) StopCoroutine(fadeCoroutine);
-                    fadeCoroutine = StartCoroutine(FadeTo(lastHitRenderer, 1f));
+                    fadeCoroutine = StartCoroutine(FadeTo(lastHitRenderer, originalColor.a));
                 }
+
+                // Зберігаємо початковий колір нового об'єкта
+                originalColor = sr.color;
 
                 // Затемнюємо новий об'єкт
                 lastHitRenderer = sr;
@@ -41,7 +45,7 @@ public class TransparencyController : MonoBehaviour
         {
             // Якщо більше нічого не закриває гравця, відновлюємо прозорість
             if (fadeCoroutine != null) StopCoroutine(fadeCoroutine);
-            fadeCoroutine = StartCoroutine(FadeTo(lastHitRenderer, 1f));
+            fadeCoroutine = StartCoroutine(FadeTo(lastHitRenderer, originalColor.a));
             lastHitRenderer = null;
         }
     }

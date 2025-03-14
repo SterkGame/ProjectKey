@@ -30,14 +30,19 @@ public class Guns : MonoBehaviour
     [SerializeField] private EnemyAI enemyAI;
     [SerializeField] private Player player;
     [SerializeField] private PauseMenu pauseMenu;
+
+    public AudioClip audioReloading;
+    public AudioClip audioShoot;
+
     public Animator anim;
+    AudioSource audioGun;
     void Start()
     {
         TimeFire = StartTimeFire;
         isReloading = false;
 
         reloadingText.gameObject.SetActive(false);
-        
+        audioGun = GetComponent<AudioSource>();
     }
 
 
@@ -104,6 +109,9 @@ public class Guns : MonoBehaviour
             if (TimeFire <= 0)
             {
                 Instantiate(bullet, BulletTransform.position, BulletTransform.rotation);
+                audioGun.pitch = Random.Range(0.90f, 1.1f);
+                if (audioShoot)
+                    audioGun.PlayOneShot(audioShoot);
                 TimeFire = StartTimeFire;
                 anim.SetBool("idle", false);
                 anim.SetBool("fire", true);
@@ -154,7 +162,8 @@ public class Guns : MonoBehaviour
     {
         reloadingText.gameObject.SetActive(true);
         isReloading = true;
-
+        if (audioReloading)
+            audioGun.PlayOneShot(audioReloading);
         yield return new WaitForSeconds(reloadTime);
         int reason = maxCurrentAmmo - currentAmmo;
         if (allAmmo >= reason)

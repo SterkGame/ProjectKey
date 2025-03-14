@@ -31,6 +31,9 @@ public class Player : MonoBehaviour {
     private int _curentHealth;
     private bool _canTakeDamage;
     private bool _isAlive;
+    public AudioClip audioRun;
+
+    AudioSource audioSrv;
 
     private void Awake() {
         Instance = this;
@@ -42,6 +45,7 @@ public class Player : MonoBehaviour {
         _canTakeDamage = true;
         _isAlive = true;
         healsSl.maxValue = _maxHealth;
+        audioSrv = GetComponent<AudioSource>();
     }
 
 
@@ -98,7 +102,12 @@ public class Player : MonoBehaviour {
         rb.MovePosition(rb.position + inputVector * (_movingSpeed * Time.fixedDeltaTime));
         if (Mathf.Abs(inputVector.x) > _minMovingSpeed || Mathf.Abs(inputVector.y) > _minMovingSpeed) {
             _isRunning = true;
-            
+            if (audioRun && !audioSrv.isPlaying)
+            {
+                audioSrv.pitch = UnityEngine.Random.Range(0.85f, 1.2f);
+                audioSrv.volume = UnityEngine.Random.Range(0.75f, 1.1f);
+                audioSrv.PlayOneShot(audioRun);
+            }
         } else {
             _isRunning = false;
         }
