@@ -6,7 +6,7 @@ public class EnemySpawner : MonoBehaviour
     public int minEnemies = 5; // Мінімальна кількість ворогів
     public int maxEnemies = 10; // Максимальна кількість ворогів
     public float spawnRadius = 50f; // Радіус карти (100x100, тому радіус = 50)
-    public float minDistanceFromCenter = 10f; // Мінімальна відстань від центру
+    public float minDistanceFromCenter = 20f; // Мінімальна відстань від центру
 
     void Start()
     {

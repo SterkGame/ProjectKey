@@ -15,19 +15,19 @@ public class LevelTask : MonoBehaviour
     {
 
         text = GetComponent<TextMeshProUGUI>();
-        enemyAIs = FindObjectsOfType<EnemyAI>();
+        //enemyAIs = FindObjectsOfType<EnemyAI>();
         enemyCount = 0;
     }
 
     void Update()
     {
-        
+        enemyAIs = FindObjectsOfType<EnemyAI>();
         allEnemyCount = enemyAIs.Length;
         text.text = "Enemies killed: " + enemyCount + "/" + allEnemyCount;
 
-        if (allEnemyCount == enemyCount)
+        if (allEnemyCount == enemyCount && allEnemyCount != 0)
         {
-            Debug.Log("Перемога");
+            //Debug.Log("Перемога");
             pauseMenu.GameOverWin();
         }
     }

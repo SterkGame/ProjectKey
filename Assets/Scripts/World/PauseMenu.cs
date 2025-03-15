@@ -19,6 +19,7 @@ public class PauseMenu : MonoBehaviour
         isOver = false;
         pauseGameMenu.SetActive(false);
         gameOver.SetActive(false);
+        Time.timeScale = 1f;
     }
 
 
