@@ -133,6 +133,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &348363436 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4471788317673024983, guid: 2075253e831248340abed113d38f8b14, type: 3}
+  m_PrefabInstance: {fileID: 6311749301671769202}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &466848700
 GameObject:
   m_ObjectHideFlags: 0
@@ -101697,6 +101702,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5622771499117125566, guid: 2075253e831248340abed113d38f8b14, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5823164198430980026}
+    - targetCorrespondingSourceObject: {fileID: 4471788317673024983, guid: 2075253e831248340abed113d38f8b14, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6311749301671769214}
     - targetCorrespondingSourceObject: {fileID: 8534704062785866008, guid: 2075253e831248340abed113d38f8b14, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6311749301671769205}
@@ -101901,6 +101909,22 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &6311749301671769214
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 348363436}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0bbe35e458c91364eb95ab95ad6e8650, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  arrowPrefab: {fileID: 298729224660732046, guid: d0d97fe642256f14988fa378a56e364f, type: 3}
+  arrowOffset: 2
+  minEnemiesToShowArrow: 3
+  spriteRotationOffset: -135
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

@@ -1,74 +1,92 @@
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class EnemyArrowIndicator : MonoBehaviour
+public class EnemyPointer : MonoBehaviour
 {
-    public Transform arrowIndicator; // Об'єкт стрілки, яка показує напрямок на ворога
-    private List<Transform> enemies = new List<Transform>(); // Список ворогів на сцені
-    private Transform targetEnemy; // Найближчий ворог, на якого вказує стрілка
-    private float searchInterval = 1.0f; // Час між оновленням списку ворогів
-    private float nextSearchTime = 0f; // Лічильник для оновлення списку ворогів
+    public GameObject arrowPrefab; // Префаб стрілки
+    public float arrowOffset = 2f; // Відстань стрілки від гравця
+    public int minEnemiesToShowArrow = 3; // Мінімальна кількість ворогів для показу стрілки
+    public float spriteRotationOffset = -135f; // Додатковий поворот спрайту (-135 градусів)
 
+    private GameObject arrow; // Екземпляр стрілки
+    private Transform player; // Трансформ гравця
+    private GameObject[] enemies; // Масив ворогів
 
-    
+    void Start()
+    {
+        // Знаходимо гравця за тегом
+        player = GameObject.FindGameObjectWithTag("Player").transform;
+
+        // Створюємо стрілку
+        arrow = Instantiate(arrowPrefab, transform);
+        arrow.SetActive(false); // Спочатку стрілка прихована
+
+        // Починаємо пошук ворогів
+        FindEnemies();
+    }
+
     void Update()
     {
-        if (Time.time >= nextSearchTime)
-        {
-            FindEnemies(); // Оновлюємо список ворогів кожну секунду
-            nextSearchTime = Time.time + searchInterval;
-        }
+        // Оновлюємо список ворогів
+        FindEnemies();
 
-        if (enemies.Count > 0 && enemies.Count <= 10) // Якщо ворогів 3 або менше – показуємо стрілку
+        // Якщо ворогів менше, ніж minEnemiesToShowArrow, показуємо стрілку
+        if (enemies != null && enemies.Length < minEnemiesToShowArrow && enemies.Length > 0)
         {
-            SelectClosestEnemy();
-            if (targetEnemy != null)
+            arrow.SetActive(true);
+
+            // Знаходимо найближчого ворога
+            GameObject nearestEnemy = FindNearestEnemy();
+
+            if (nearestEnemy != null)
             {
-                arrowIndicator.gameObject.SetActive(true);
-                PointToEnemy();
+                // Напрямок до ворога
+                Vector3 direction = (nearestEnemy.transform.position - player.position).normalized;
+
+                // Позиція стрілки
+                arrow.transform.position = player.position + direction * arrowOffset;
+
+                // Поворот стрілки в бік ворога з урахуванням додаткового повороту спрайту
+                float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg + spriteRotationOffset;
+                arrow.transform.rotation = Quaternion.Euler(0, 0, angle);
             }
+        }
+        else
+        {
+            // Приховуємо стрілку, якщо ворогів достатньо
+            arrow.SetActive(false);
         }
     }
 
-    // Автоматично знаходить всіх ворогів у грі
     void FindEnemies()
     {
-        enemies.Clear(); // Очищаємо старий список
-        GameObject[] enemyObjects = GameObject.FindGameObjectsWithTag("Enemy"); // Шукаємо ворогів за тегом "Enemy"
+        // Шукаємо всі об'єкти з тегом "Enemy"
+        GameObject[] allEnemies = GameObject.FindGameObjectsWithTag("Enemy");
 
-        foreach (GameObject enemy in enemyObjects)
+        // Відфільтровуємо мертвих ворогів
+        enemies = System.Array.FindAll(allEnemies, enemy =>
         {
-            enemies.Add(enemy.transform); // Додаємо їх у список
-        }
+            EnemyAI enemyAI = enemy.GetComponent<EnemyAI>();
+            return enemyAI != null && enemyAI._currentState != EnemyAI.State.Death;
+        });
     }
 
-    // Вибирає найближчого ворога до гравця
-    void SelectClosestEnemy()
+    GameObject FindNearestEnemy()
     {
-        float minDistance = Mathf.Infinity;
-        Transform closestEnemy = null;
+        GameObject nearestEnemy = null;
+        float nearestDistance = Mathf.Infinity;
 
-        foreach (Transform enemy in enemies)
+        // Проходимо по всіх ворогах і знаходимо найближчого
+        foreach (GameObject enemy in enemies)
         {
-            if (enemy == null) continue; // Пропускаємо знищених ворогів
-
-            float distance = Vector3.Distance(transform.position, enemy.position);
-            if (distance < minDistance)
+            float distance = Vector3.Distance(player.position, enemy.transform.position);
+            if (distance < nearestDistance)
             {
-                minDistance = distance;
-                closestEnemy = enemy;
+                nearestDistance = distance;
+                nearestEnemy = enemy;
             }
         }
 
-        targetEnemy = closestEnemy; // Оновлюємо ціль для стрілки
-    }
-
-    // Повертає стрілку у бік найближчого ворога
-    void PointToEnemy()
-    {
-        if (targetEnemy == null) return;
-        Vector3 direction = (targetEnemy.position - transform.position).normalized;
-        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        arrowIndicator.rotation = Quaternion.Euler(0, 0, angle);
+        return nearestEnemy;
     }
 }
