@@ -36,7 +36,7 @@ public class LevelChenger : MonoBehaviour
 
         while (operation.progress < 0.9f) // Чекаємо, поки сцена завантажиться
         {
-            Debug.Log("Крок 1");
+
             float progress = Mathf.Clamp01(operation.progress / .9f);
             slider.value = progress;
             yield return null;
@@ -44,11 +44,11 @@ public class LevelChenger : MonoBehaviour
 
         while (!GenerationEnv.Instance || !GenerationEnv.Instance.IsGenerationComplete)
         {
-            Debug.Log("Очікуємо завершення генерації...");
+
             yield return null;
         }
 
-        Debug.Log("Крок 4");
+
         operation.allowSceneActivation = true;
         loadingScreen.SetActive(false);
     }

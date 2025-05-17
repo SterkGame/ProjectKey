@@ -246,7 +246,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 40
   destroy: 2
-  damage: 1
+  damagePl: 2
+  damageEn: 2
   distance: 1
   whatIsSolid:
     serializedVersion: 2

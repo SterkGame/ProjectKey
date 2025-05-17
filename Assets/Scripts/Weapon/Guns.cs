@@ -12,8 +12,8 @@ public class Guns : MonoBehaviour
     public GunType gunType;
     public float StartTimeFire;
     public float offset;
-    public int currentAmmo = 20;
-    public int maxCurrentAmmo = 20;
+    public int currentAmmo = 15;
+    public int maxCurrentAmmo = 15;
     public int allAmmo = 150;
     public int fullAmmo = 240;
     private float reloadTime = 3f;
@@ -38,6 +38,9 @@ public class Guns : MonoBehaviour
     AudioSource audioGun;
     void Start()
     {
+        PlayerData data = SaveSystem.LoadPlayer();
+        maxCurrentAmmo = data.maxAmmo;
+        currentAmmo = maxCurrentAmmo;
         TimeFire = StartTimeFire;
         isReloading = false;
 
@@ -50,7 +53,7 @@ public class Guns : MonoBehaviour
     {
         if (gunType == GunType.Enemy)
         {
-            enemyAI = GetComponentInParent<EnemyAI>();  // Шукаємо в батьківському об'єкті
+            enemyAI = GetComponentInParent<EnemyAI>(); 
         }
         player = FindObjectOfType<Player>();
 
@@ -135,7 +138,7 @@ public class Guns : MonoBehaviour
             ammoCount.text = currentAmmo + "/" + allAmmo;
         }
 
-        if (((Input.GetKeyDown(KeyCode.R) && gunType == GunType.Player) || currentAmmo == 0) && !isReloading)
+        if (((Input.GetKeyDown(KeyCode.R) && gunType == GunType.Player) || currentAmmo == 0) && !isReloading && allAmmo > 0)
         {
             if (currentAmmo < maxCurrentAmmo)
             {

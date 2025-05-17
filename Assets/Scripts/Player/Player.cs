@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
+using TMPro;
 
 
 [SelectionBase]
@@ -14,6 +15,9 @@ public class Player : MonoBehaviour {
     public event EventHandler OnTakeHits;
     public GameObject bloodPrefab;
     public GameObject guns;
+    public int medicalClipCount;
+    public TextMeshProUGUI medicalClipText;
+
 
     [SerializeField] private float _movingSpeed = 10f;
     [SerializeField] private int _maxHealth = 10;
@@ -41,17 +45,26 @@ public class Player : MonoBehaviour {
     }
 
     private void Start() {
+        PlayerData data = SaveSystem.LoadPlayer();
+        _maxHealth = data.maxHealth;
         _curentHealth = _maxHealth;
         _canTakeDamage = true;
         _isAlive = true;
         healsSl.maxValue = _maxHealth;
         audioSrv = GetComponent<AudioSource>();
+        medicalClipText.text = medicalClipCount + "/3";
     }
 
 
     private void Update() {
         healsSl.value = _curentHealth;
         inputVector = GameInput.Instance.GetMovementVector();
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            MedicalHeal();
+            medicalClipText.text = medicalClipCount + "/3";
+        }
+            
     }
 
 
@@ -65,8 +78,24 @@ public class Player : MonoBehaviour {
         return _isAlive;
     }
 
-    public void TakeDamage(int damage)
+    public void TakeDamage(int baseDamage)
     {
+        int damage = baseDamage;
+        var data = SaveSystem.LoadPlayer();
+
+        switch (data.difficulty)
+        {
+            case GameDifficulty.Легкий:
+                damage = Mathf.RoundToInt(baseDamage * 0.5f);
+                break;
+            case GameDifficulty.Середній:
+                damage = baseDamage;
+                break;
+            case GameDifficulty.Важкий:
+                damage = Mathf.RoundToInt(baseDamage * 2f);
+                break;
+        }
+
         if (_canTakeDamage && _isAlive)
         {
             _canTakeDamage = false;
@@ -122,15 +151,32 @@ public class Player : MonoBehaviour {
         return playerScreenPosition;
     }
 
+    public void MedicalHeal()
+    {
+        if (medicalClipCount > 0)
+        {
+            medicalClipCount -= 1;
+            _curentHealth += _maxHealth / 2;
+            if (_curentHealth > _maxHealth)
+            {
+                _curentHealth = _maxHealth;
+            }
+
+        }
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.GetComponent<MedicalClip>())
         {
-            
-            _curentHealth += 4;
-            if (_curentHealth > _maxHealth)
+            if (medicalClipCount < 3)
             {
-                _curentHealth = _maxHealth;
+                medicalClipCount += 1;
+                medicalClipText.text = medicalClipCount + "/3";
+            }
+            else
+            {
+                medicalClipCount = 3;
             }
             Destroy(collision.gameObject);
         }

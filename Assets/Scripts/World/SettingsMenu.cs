@@ -10,40 +10,43 @@ public class SettingsMenu : MonoBehaviour
     public TMP_Dropdown qualityDropdown;
     public Toggle fullscreenToggle;
 
-    private Resolution[] resolutions;
+    public TextMeshProUGUI deathsText;
+    public TextMeshProUGUI killsText;
+    public TextMeshProUGUI winsText;
+
+    private Resolution[] availableResolutions = new Resolution[]
+    {
+        new Resolution { width = 1920, height = 1080 },
+        new Resolution { width = 1600, height = 900 },
+        new Resolution { width = 1366, height = 768 },
+        new Resolution { width = 1280, height = 720 }
+    };
 
     void Start()
     {
-        // Ініціалізація випадаючого списку розширень
         InitializeResolutionDropdown();
-
-        // Ініціалізація випадаючого списку якості
         InitializeQualityDropdown();
-
-        // Завантаження збережених налаштувань
         LoadSettings();
+        ShowStats();
 
-        // Підписка на зміну значень
         resolutionDropdown.onValueChanged.AddListener(SetResolution);
         qualityDropdown.onValueChanged.AddListener(SetQuality);
         fullscreenToggle.onValueChanged.AddListener(SetFullscreen);
     }
 
-    // Ініціалізація випадаючого списку розширень
     private void InitializeResolutionDropdown()
     {
         resolutionDropdown.ClearOptions();
-        resolutions = Screen.resolutions;
         List<string> options = new List<string>();
         int currentResolutionIndex = 0;
 
-        for (int i = 0; i < resolutions.Length; i++)
+        for (int i = 0; i < availableResolutions.Length; i++)
         {
-            string option = resolutions[i].width + "x" + resolutions[i].height + " " + resolutions[i].refreshRateRatio.value + "Hz";
+            string option = availableResolutions[i].width + "x" + availableResolutions[i].height;
             options.Add(option);
 
-            if (resolutions[i].width == Screen.currentResolution.width &&
-                resolutions[i].height == Screen.currentResolution.height)
+            if (availableResolutions[i].width == Screen.currentResolution.width &&
+                availableResolutions[i].height == Screen.currentResolution.height)
             {
                 currentResolutionIndex = i;
             }
@@ -54,7 +57,6 @@ public class SettingsMenu : MonoBehaviour
         resolutionDropdown.RefreshShownValue();
     }
 
-    // Ініціалізація випадаючого списку якості
     private void InitializeQualityDropdown()
     {
         qualityDropdown.ClearOptions();
@@ -64,38 +66,38 @@ public class SettingsMenu : MonoBehaviour
         qualityDropdown.RefreshShownValue();
     }
 
-    // Встановлення розширення
     public void SetResolution(int resolutionIndex)
     {
-        Resolution resolution = resolutions[resolutionIndex];
+        if (resolutionIndex < 0 || resolutionIndex >= availableResolutions.Length)
+        {
+            Debug.LogWarning("Invalid resolution index: " + resolutionIndex);
+            return;
+        }
+
+        Resolution resolution = availableResolutions[resolutionIndex];
         Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreen);
     }
 
-    // Встановлення якості
     public void SetQuality(int qualityIndex)
     {
         QualitySettings.SetQualityLevel(qualityIndex);
     }
 
-    // Встановлення повноекранного режиму
     public void SetFullscreen(bool isFullscreen)
     {
         Screen.fullScreen = isFullscreen;
     }
 
-    // Збереження налаштувань
     public void SaveSettings()
     {
         PlayerPrefs.SetInt("QualitySetting", qualityDropdown.value);
         PlayerPrefs.SetInt("ResolutionSetting", resolutionDropdown.value);
         PlayerPrefs.SetInt("FullscreenSetting", fullscreenToggle.isOn ? 1 : 0);
-        PlayerPrefs.Save(); // Збереження налаштувань на диск
+        PlayerPrefs.Save();
     }
 
-    // Завантаження налаштувань
     public void LoadSettings()
     {
-        // Завантаження якості
         if (PlayerPrefs.HasKey("QualitySetting"))
         {
             int qualityIndex = PlayerPrefs.GetInt("QualitySetting");
@@ -103,15 +105,19 @@ public class SettingsMenu : MonoBehaviour
             SetQuality(qualityIndex);
         }
 
-        // Завантаження розширення
         if (PlayerPrefs.HasKey("ResolutionSetting"))
         {
             int resolutionIndex = PlayerPrefs.GetInt("ResolutionSetting");
+
+            if (resolutionIndex < 0 || resolutionIndex >= availableResolutions.Length)
+            {
+                resolutionIndex = 0;
+            }
+
             resolutionDropdown.value = resolutionIndex;
             SetResolution(resolutionIndex);
         }
 
-        // Завантаження повноекранного режиму
         if (PlayerPrefs.HasKey("FullscreenSetting"))
         {
             bool isFullscreen = PlayerPrefs.GetInt("FullscreenSetting") == 1;
@@ -120,9 +126,17 @@ public class SettingsMenu : MonoBehaviour
         }
     }
 
-    // Викликається при закритті меню налаштувань
+    public void ShowStats()
+    {
+        PlayerData data = SaveSystem.LoadPlayer();
+
+        deathsText.text = "Програв: " + data.totalDeaths;
+        killsText.text = "Вбив ворогів: " + data.totalKills;
+        winsText.text = "Переміг: " + data.totalWins;
+    }
+
     public void OnSettingsClosed()
     {
-        SaveSettings(); // Зберегти налаштування перед закриттям
+        SaveSettings();
     }
 }

@@ -4,10 +4,12 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
+    
     Rigidbody2D rb;
     public float speed;
     public int destroy;
-    public int damage;
+    public int damagePl;
+    public int damageEn;
     public float distance;
     public LayerMask whatIsSolid;
 
@@ -16,6 +18,9 @@ public class Bullet : MonoBehaviour
 
     void Start()
     {
+        PlayerData data = SaveSystem.LoadPlayer();
+        damagePl = data.weaponDamage;
+
         rb = GetComponent<Rigidbody2D>();
         rb.velocity = transform.right * speed;
         Invoke("DestroyTime", destroy);
@@ -31,11 +36,11 @@ public class Bullet : MonoBehaviour
         {
             if (hitInfo.collider.CompareTag("Enemy"))
             {
-                hitInfo.collider.GetComponent<EnemyEntity>().TakeDamage(damage);
+                hitInfo.collider.GetComponent<EnemyEntity>().TakeDamage(damagePl);
             }
             if (hitInfo.collider.CompareTag("Player"))
             {
-                hitInfo.collider.GetComponent<Player>().TakeDamage(damage);
+                hitInfo.collider.GetComponent<Player>().TakeDamage(damageEn);
             }
             Destroy(gameObject);
         }

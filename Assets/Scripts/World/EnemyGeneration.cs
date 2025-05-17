@@ -2,28 +2,44 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
-    public GameObject enemyPrefab; // Префаб ворога
-    public int minEnemies = 5; // Мінімальна кількість ворогів
-    public int maxEnemies = 10; // Максимальна кількість ворогів
-    public float spawnRadius = 50f; // Радіус карти (100x100, тому радіус = 50)
-    public float minDistanceFromCenter = 20f; // Мінімальна відстань від центру
+    public GameObject enemyPrefab;
+    public int minEnemies = 5;
+    public int maxEnemies = 10;
+    public float spawnRadius = 50f;
+    public float minDistanceFromCenter = 20f;
 
     void Start()
     {
+        PlayerData data = SaveSystem.LoadPlayer();
+        switch (data.difficulty)
+        {
+            case GameDifficulty.Легкий:
+                minEnemies = 3;
+                maxEnemies = 6;
+                break;
+            case GameDifficulty.Середній:
+                minEnemies = 5;
+                maxEnemies = 10;
+                break;
+            case GameDifficulty.Важкий:
+                minEnemies = 8;
+                maxEnemies = 12;
+                break;
+        }
+
         SpawnEnemies();
     }
 
     void SpawnEnemies()
     {
-        // Випадкова кількість ворогів
+
         int enemyCount = Random.Range(minEnemies, maxEnemies + 1);
 
         for (int i = 0; i < enemyCount; i++)
         {
-            // Генеруємо випадкову позицію
+
             Vector2 spawnPosition = GetRandomSpawnPosition();
 
-            // Створюємо ворога на цій позиції
             Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
         }
     }
@@ -35,15 +51,14 @@ public class EnemySpawner : MonoBehaviour
 
         do
         {
-            // Генеруємо випадкові координати в межах карти
+
             float x = Random.Range(-spawnRadius, spawnRadius);
             float y = Random.Range(-spawnRadius, spawnRadius);
             spawnPosition = new Vector2(x, y);
 
-            // Обчислюємо відстань від центру
             distanceFromCenter = Vector2.Distance(Vector2.zero, spawnPosition);
 
-        } while (distanceFromCenter < minDistanceFromCenter); // Повторюємо, якщо позиція занадто близько до центру
+        } while (distanceFromCenter < minDistanceFromCenter);
 
         return spawnPosition;
     }

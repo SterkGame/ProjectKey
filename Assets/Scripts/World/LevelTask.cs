@@ -6,7 +6,7 @@ using TMPro;
 public class LevelTask : MonoBehaviour
 {
     TextMeshProUGUI text;
-    public static int enemyCount;
+    public int enemyCount;
     public static int allEnemyCount;
     public EnemyAI[] enemyAIs;
     public PauseMenu pauseMenu;
@@ -23,9 +23,9 @@ public class LevelTask : MonoBehaviour
     {
         enemyAIs = FindObjectsOfType<EnemyAI>();
         allEnemyCount = enemyAIs.Length;
-        text.text = "Enemies killed: " + enemyCount + "/" + allEnemyCount;
+        text.text = "Ворогів вбито: " + enemyCount + "/" + allEnemyCount;
 
-        if (allEnemyCount == enemyCount && allEnemyCount != 0)
+        if (allEnemyCount == enemyCount && allEnemyCount != 0 && pauseMenu.isOver == false)
         {
             //Debug.Log("Перемога");
             pauseMenu.GameOverWin();

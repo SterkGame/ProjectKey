@@ -33,6 +33,22 @@ public class EnemyEntity : MonoBehaviour
 
     private void Start()
     {
+
+        var data = SaveSystem.LoadPlayer();
+        switch (data.difficulty)
+        {
+            case GameDifficulty.Легкий:
+                enemyHealth = 5;
+                break;
+            case GameDifficulty.Середній:
+                enemyHealth = 10;
+                break;
+            case GameDifficulty.Важкий:
+                enemyHealth = 15;
+                break;
+        }
+
+
         capsuleCollider2D = GetComponent<CapsuleCollider2D>();
         rb = GetComponent<Rigidbody2D>();
         _currentHealth = enemyHealth;

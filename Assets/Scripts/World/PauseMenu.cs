@@ -7,10 +7,11 @@ using TMPro;
 
 public class PauseMenu : MonoBehaviour
 {
+    public LevelTask levelTask;
     public bool pauseGame;
     public GameObject pauseGameMenu;
     public GameObject gameOver;
-    private bool isOver;
+    public bool isOver;
     public TextMeshProUGUI textOver;
     public Image imageOver;
 
@@ -60,22 +61,45 @@ public class PauseMenu : MonoBehaviour
     {
         isOver = true;
         gameOver.SetActive(true);
-        textOver.text = "Game Over";
+        textOver.text = "Поразка";
         textOver.color = new Color(1f, 0f, 0f, 1f);
         imageOver.color = new Color(0.62f, 0.14f, 0.14f, 0.58f);
         Time.timeScale = 0f;
-        pauseGame = true; 
+        pauseGame = true;
+
+        // Нарахування винагороди тільки за вбитих ворогів
+        int reward = levelTask.enemyCount * 20;
+
+        PlayerData data = SaveSystem.LoadPlayer();
+        data.coins += reward;
+        data.totalKills += levelTask.enemyCount;
+        data.totalDeaths += 1;
+        Debug.Log("Монети: " + reward);
+        SaveSystem.SavePlayer(data);
     }
+
     public void GameOverWin()
     {
         isOver = true;
         gameOver.SetActive(true);
-        textOver.text = "You Win";
+        textOver.text = "Перемога";
         textOver.color = new Color(0f, 1f, 0f, 1f);
         imageOver.color = new Color(0.53f, 1f, 0.5f, 0.58f);
         Time.timeScale = 0f;
         pauseGame = true;
+
+        // Винагорода за ворогів + бонус
+        int reward = levelTask.enemyCount * 20;
+        Debug.Log("Монети: " + reward);
+        reward = reward + 100;
+        Debug.Log("Монети: " + reward);
+        PlayerData data = SaveSystem.LoadPlayer();
+        data.coins += reward;
+        data.totalKills += levelTask.enemyCount;
+        data.totalWins += 1;
+        SaveSystem.SavePlayer(data);
     }
+
 
     public void RestartScene()
     {
@@ -90,6 +114,8 @@ public class PauseMenu : MonoBehaviour
 
     public void LoadMenu()
     {
+
+
         Time.timeScale = 1f;
         SceneManager.LoadScene("Menu");
     }
