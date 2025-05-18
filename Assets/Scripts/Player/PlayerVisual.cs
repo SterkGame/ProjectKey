@@ -42,7 +42,6 @@ public class PlayerVisual : MonoBehaviour {
 
     private void Update() {
         animator.SetBool(IS_RUNNING, Player.Instance.IsRunning());
-
         if (Player.Instance.IsAlive())//&& pauseMenu?.pauseGame == false)
             AdjustPlayerFacingDirection();
     }

@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.UI;
 using static Guns;
 
@@ -13,7 +14,7 @@ public class EnemyEntity : MonoBehaviour
     public GameObject ammoClip;
     public GameObject medicalClip;
     public LevelTask levelTask;
-
+    private SortingGroup sortingGroup;
     public event EventHandler OnTakeHit;
     public event EventHandler OnDeath;
 
@@ -29,6 +30,7 @@ public class EnemyEntity : MonoBehaviour
     {
         _enemyAI = GetComponent<EnemyAI>();
         levelTask = FindObjectOfType<LevelTask>();
+        sortingGroup = GetComponent<SortingGroup>();
     }
 
     private void Start()
@@ -52,6 +54,17 @@ public class EnemyEntity : MonoBehaviour
         capsuleCollider2D = GetComponent<CapsuleCollider2D>();
         rb = GetComponent<Rigidbody2D>();
         _currentHealth = enemyHealth;
+    }
+
+    Vector3 lastPosition;
+    void LateUpdate()
+    {
+
+        if (transform.position != lastPosition)
+        {
+            sortingGroup.sortingOrder = Mathf.RoundToInt(-transform.position.y * 2);
+            lastPosition = transform.position;
+        }
     }
 
     private void OnTriggerStay2D(Collider2D collision)
@@ -92,6 +105,7 @@ public class EnemyEntity : MonoBehaviour
             int randomChance = UnityEngine.Random.Range(0, 100);
             GameObject itemToSpawn = randomChance < 50 ? ammoClip : medicalClip; // Випадковість предмету
             Instantiate(itemToSpawn, transform.position, Quaternion.identity);
+            sortingGroup.sortingOrder = Mathf.RoundToInt(-2000);
 
             //Destroy(gameObject);
         }

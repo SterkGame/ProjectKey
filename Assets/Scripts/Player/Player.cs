@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
 using TMPro;
+using UnityEngine.Rendering;
 
 
 [SelectionBase]
@@ -28,10 +29,9 @@ public class Player : MonoBehaviour {
     Vector2 inputVector;
 
     private Rigidbody2D rb;
-
+    private SortingGroup sortingGroup;
     private float _minMovingSpeed = 0.1f;
     private bool _isRunning = false;
-
     private int _curentHealth;
     private bool _canTakeDamage;
     private bool _isAlive;
@@ -42,6 +42,7 @@ public class Player : MonoBehaviour {
     private void Awake() {
         Instance = this;
         rb = GetComponent<Rigidbody2D>();
+        sortingGroup = GetComponent<SortingGroup>();
     }
 
     private void Start() {
@@ -65,6 +66,16 @@ public class Player : MonoBehaviour {
             medicalClipText.text = medicalClipCount + "/3";
         }
             
+    }
+    Vector3 lastPosition;
+    void LateUpdate()
+    {
+
+        if (transform.position != lastPosition)
+        {
+            sortingGroup.sortingOrder = Mathf.RoundToInt(-transform.position.y * 2);
+            lastPosition = transform.position;
+        }
     }
 
 
