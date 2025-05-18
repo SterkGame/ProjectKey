@@ -314,7 +314,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 107d6c62ef0837d4b818aca506253944, type: 2}
   - {fileID: 11400000, guid: ef7816cbce7f4c048ad713b06cec700a, type: 2}
   buildingPrefabs:
-  - {fileID: 8369109743382935100, guid: 25b47a4677782e44eb9ace007bcaad4d, type: 3}
+  - {fileID: 2307116958062551663, guid: 2b18e5c24e1bc6b47a3c317d984e4cfb, type: 3}
+  - {fileID: 8097836282801048700, guid: 8a1a38cc11c266646b345a5370eb115c, type: 3}
+  - {fileID: 2713908602968667334, guid: 39acd6786c5d14b488daed962c27d98a, type: 3}
+  - {fileID: 2713908602968667334, guid: 39acd6786c5d14b488daed962c27d98a, type: 3}
   vegetationPrefabs:
   - {fileID: 5457678670939064464, guid: 844fc32af19f6854ab3415b523d71993, type: 3}
   - {fileID: 7833366385445972637, guid: 37189bf5d1b68d9479b70681229bec3d, type: 3}
@@ -341,10 +344,10 @@ MonoBehaviour:
   - {fileID: 8310698517909044240, guid: e9e4129109fadfc409e416cda7ef25b4, type: 3}
   grassDensity: 10000
   mapSize: 200
-  numberOfBuildings: 4
+  numberOfBuildings: 6
   vegetationDensity: 200
   roadThickness: 3
-  buildingSpacing: 20
+  buildingSpacing: 10
   vegetationSpacing: 2
   noiseScale: 20
 --- !u!114 &529059606
@@ -664,7 +667,7 @@ Transform:
   m_GameObject: {fileID: 1392537649}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0.08, y: -0.03, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -101425,12 +101428,28 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 235171227549118049, guid: 43a779b38bbae2645afa63f0d0f73a1c, type: 3}
+      propertyPath: m_SortingLayer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 235171227549118049, guid: 43a779b38bbae2645afa63f0d0f73a1c, type: 3}
       propertyPath: m_SortingOrder
       value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 235171227549118049, guid: 43a779b38bbae2645afa63f0d0f73a1c, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 1438850183
       objectReference: {fileID: 0}
     - target: {fileID: 1222887243380732719, guid: 43a779b38bbae2645afa63f0d0f73a1c, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: 41.17993
+      objectReference: {fileID: 0}
+    - target: {fileID: 2541275591887515308, guid: 43a779b38bbae2645afa63f0d0f73a1c, type: 3}
+      propertyPath: m_SortingLayer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2541275591887515308, guid: 43a779b38bbae2645afa63f0d0f73a1c, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 1438850183
       objectReference: {fileID: 0}
     - target: {fileID: 3189453635867459983, guid: 43a779b38bbae2645afa63f0d0f73a1c, type: 3}
       propertyPath: m_Pivot.x
@@ -101536,6 +101555,10 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 1749668434}
+    - target: {fileID: 7040418595697253353, guid: 43a779b38bbae2645afa63f0d0f73a1c, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 1438850183
+      objectReference: {fileID: 0}
     - target: {fileID: 8335031997689603147, guid: 43a779b38bbae2645afa63f0d0f73a1c, type: 3}
       propertyPath: slider
       value: 

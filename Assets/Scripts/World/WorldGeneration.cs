@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.Tilemaps;
+using UnityEngine.UIElements;
 
 public class MapGenerator : MonoBehaviour
 {
@@ -20,11 +21,12 @@ public class MapGenerator : MonoBehaviour
     public int numberOfBuildings = 4;
     public int vegetationDensity = 100;
     public int roadThickness = 3;
-    public int buildingSpacing = 20;
+    public int buildingSpacing = 5;
     public int vegetationSpacing = 2;
     public float noiseScale = 20f;
     private float forestThreshold = 0.9f;
     private float clearingThreshold = 0.7f;
+    private NavMeshUpdater navMeshUpdater;
 
     private GameObject environmentParent;
 
@@ -35,9 +37,12 @@ public class MapGenerator : MonoBehaviour
     {
         isWinterBiome = Random.value < 0.5f;
         environmentParent = new GameObject("Environment");
+        navMeshUpdater = FindObjectOfType<NavMeshUpdater>();
+        navMeshUpdater.UpdateNavMesh();
 
         GenerateMap();
         GenerateGrass();
+        navMeshUpdater.UpdateNavMesh();
     }
 
     void GenerateMap()
@@ -104,6 +109,12 @@ public class MapGenerator : MonoBehaviour
                 GameObject buildingPrefab = buildingPrefabs[Random.Range(0, buildingPrefabs.Length)];
                 GameObject building = Instantiate(buildingPrefab, new Vector3(x, y, 0), Quaternion.identity);
                 building.transform.parent = environmentParent.transform;
+
+                SpriteRenderer sr = building.GetComponent<SpriteRenderer>();
+                if (sr != null)
+                {
+                    sr.sortingOrder = Mathf.RoundToInt(-new Vector3(x, y, 0).y * 2);
+                }
             }
             else
             {
@@ -137,6 +148,7 @@ public class MapGenerator : MonoBehaviour
                     if (Random.Range(0, 5) == 0)
                         PlaceTree(x, y);
                 }
+
             }
         }
     }
@@ -149,6 +161,12 @@ public class MapGenerator : MonoBehaviour
             GameObject treePrefab = vegetationSet[Random.Range(0, vegetationSet.Length)];
             GameObject tree = Instantiate(treePrefab, new Vector3(x, y, 0), Quaternion.identity);
             tree.transform.parent = environmentParent.transform;
+
+            SpriteRenderer sr = tree.GetComponent<SpriteRenderer>();
+            if (sr != null)
+            {
+                sr.sortingOrder = Mathf.RoundToInt(-new Vector3(x, y, 0).y * 2);
+            }
         }
     }
 
@@ -213,6 +231,12 @@ public class MapGenerator : MonoBehaviour
                 GameObject grassPrefab = grassSet[Random.Range(0, grassSet.Length)];
                 GameObject grass = Instantiate(grassPrefab, new Vector3(x, y, 0), Quaternion.identity);
                 grass.transform.parent = environmentParent.transform;
+
+                SpriteRenderer sr = grass.GetComponent<SpriteRenderer>();
+                if (sr != null)
+                {
+                    sr.sortingOrder = Mathf.RoundToInt(-new Vector3(x, y, 0).y * 2);
+                }
             }
         }
     }

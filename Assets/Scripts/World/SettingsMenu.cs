@@ -139,4 +139,11 @@ public class SettingsMenu : MonoBehaviour
     {
         SaveSettings();
     }
+
+    public void ResetProgress()
+    {
+        SaveSystem.ResetPlayer();
+        Debug.Log("ѕрогрес скинуто до початкових значень!");
+        ShowStats();
+    }
 }

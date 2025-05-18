@@ -23,4 +23,10 @@ public static class SaveSystem
             return new PlayerData();
         }
     }
+
+    public static void ResetPlayer()
+    {
+        PlayerData defaultData = new PlayerData();
+        SavePlayer(defaultData);
+    }
 }
